@@ -1,0 +1,47 @@
+{% extends 'scraper/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block main %}
+
+<div class="container">
+    <h1 class="text-center my-5">Price Tracker</h1>
+
+    <button class="btn btn-success float-right mb-3" id="add-link-btn">Add New</button>
+
+    <table class="table">
+        <col width="30%">
+        <thead>
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Website</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for link in object_list %}
+            <tr>
+                <td class="align-middle">{{ link.product_name }}</td>
+                <td class="align-middle">{{ link.website_name }}</td>
+                <td>
+                    <span class="float-right">
+                        <a href="{{ link.link }}" class="btn btn-primary">View Product</a>
+                        <a href="/{{ link.id }}" class="btn btn-secondary">Price History</a>
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $('#add-link-btn').click(function() {
+        
+    });
+</script>
+
+{% endblock %}

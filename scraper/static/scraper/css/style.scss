@@ -1,0 +1,14 @@
+@import './fonts';
+@import './index';
+
+
+body {
+    font-family: 'Airbnb Cereal App Book';
+}
+
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 900px;
+    }
+}
