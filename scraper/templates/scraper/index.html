@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for link in object_list %}
+            {% for link in links %}
             <tr>
                 <td class="align-middle">{{ link.product_name }}</td>
                 <td class="align-middle">{{ link.website_name }}</td>
@@ -28,6 +28,10 @@
                     <span class="float-right">
                         <a href="{{ link.link }}" class="btn btn-primary">View Product</a>
                         <a href="/{{ link.id }}" class="btn btn-secondary">Price History</a>
+                        <form action="/{{ link.id }}/delete" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
                     </span>
                 </td>
             </tr>
@@ -42,20 +46,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="/" method="POST">{% csrf_token %}
-            <div class="modal-header">
-                <h5 class="modal-title">Add Link</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="text" name="product" class="form-control mb-3" placeholder="Enter product name">
-                <input type="text" name="link" class="form-control" placeholder="Enter your link">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Add</button>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Link</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <input type="text" name="product" class="form-control mb-3" placeholder="Enter product name">
+                <input type="text" name="link" class="form-control" placeholder="Enter your link"> -->
+                    {% load crispy_forms_tags %}
+                    {{ form|crispy }}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Add</button>
+                    <!-- <input type="submit" value="Add"> -->
+                </div>
             </form>
         </div>
     </div>
