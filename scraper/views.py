@@ -26,3 +26,7 @@ class Index(View):
 
     def delete(self, request):
         return HttpResponse('deleted')
+
+class LinkDelete(generic.DeleteView):
+    model = Link
+    success_url = '/'
