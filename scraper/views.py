@@ -36,7 +36,9 @@ class LinkDelete(generic.DeleteView):
 
 
 class History(generic.ListView):
-    model = Price
     template_name = 'scraper/price_history.html'
     ordering = ['-id']
     paginate_by = 50
+
+    def get_queryset(self, *args, **kwargs):
+        return Price.objects.filter(link=self.kwargs['pk'])
