@@ -11,6 +11,20 @@ body {
     margin-top: 10rem;
 }
 
+.message {
+    margin: 1rem;
+    padding: 1rem 1rem;
+    border-radius: 5px;
+}
+
+.message.error {
+    background: #ECD2D4;
+}
+
+.message.success {
+    background: #D9ECDB;
+}
+
 
 @media (min-width: 1200px) {
     .container {

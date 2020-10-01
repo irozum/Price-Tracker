@@ -1,9 +1,9 @@
 from django.views import generic, View
-from scraper.models import Link, Price
+from scraper.models import Link, Price, Website
 from django.shortcuts import redirect, render
 from urllib.parse import urlparse
 from .forms import LinkForm
-from django.http import HttpResponse
+from django.contrib import messages
 
 
 class Index(View):
@@ -18,13 +18,16 @@ class Index(View):
     def post(self, request):
         product = request.POST.get('product', '')
         link = request.POST.get('link', '')
-        domain = urlparse(link).netloc
-        website = domain if domain else 'N/A'
-        Link(website_name=website, product_name=product, url=link).save()
-        return redirect('/')
+        website_id = request.POST.get('website', '')
+        website = Website.objects.get(pk=website_id)
 
-    def delete(self, request):
-        return HttpResponse('deleted')
+        if website.domain not in link:
+            messages.error(request, "Website and link don't match")
+            return redirect('/')
+
+        Link(website=website, product_name=product, url=link).save()
+        messages.success(request, "Product has been added")
+        return redirect('/')
 
 
 class LinkDelete(generic.DeleteView):

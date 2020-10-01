@@ -4,7 +4,6 @@
 
 
 {% block main %}
-
 <div class="container">
     <h1 class="text-center my-5">Price Tracker</h1>
 
@@ -23,7 +22,7 @@
             {% for link in links %}
             <tr>
                 <td class="align-middle">{{ link.product_name }}</td>
-                <td class="align-middle">{{ link.website_name }}</td>
+                <td class="align-middle">{{ link.website.name }}</td>
                 <td>
                     <span class="float-right">
                         <a href="{{ link.url }}" title="View Product"><svg viewBox="0 0 16 16" class="bi bi-shop home-icon text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
