@@ -3,7 +3,6 @@ from scraper.models import Link, Price
 from django.shortcuts import redirect, render
 from urllib.parse import urlparse
 from .forms import LinkForm
-
 from django.http import HttpResponse
 
 

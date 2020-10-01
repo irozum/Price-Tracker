@@ -1,0 +1,1 @@
+web: gunicorn scraper_project.wsgi --log-file -
