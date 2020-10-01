@@ -81,9 +81,17 @@ WSGI_APPLICATION = 'scraper_project.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd3gnc9roa78d39',
+        'USER': 'pzqnlgeetbtfiu',
+        'PASSWORD': '9ab223107bc2693f36fb3eba377511c70b3924417b163e72650d2a11eb13d2ff',
+        'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
