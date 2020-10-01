@@ -52,8 +52,9 @@ def check():
             difference = 'increased' if newPrice > yesterdayPrice else 'decreased'
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, newPrice)
 
+        print(newPrice)
         newPrice = Price(link=link, price=newPrice)
-        newPrice.save()        
+        newPrice.save()
 
     driver.quit()
 
