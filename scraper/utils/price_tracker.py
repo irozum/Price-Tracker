@@ -47,8 +47,6 @@ def check():
         newPrice = Price(link=link, price=newPrice)
         newPrice.save()
 
-        print(newPrice.price)
-
         prices = Price.objects.filter(link=link).order_by('-id')
         if len(prices) == 1: break
         todayPrice = prices[0].price
