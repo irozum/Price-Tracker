@@ -20,7 +20,7 @@ class Index(View):
         link = request.POST.get('link', '')
         domain = urlparse(link).netloc
         website = domain if domain else 'N/A'
-        Link(website_name=website, product_name=product, link=link).save()
+        Link(website_name=website, product_name=product, url=link).save()
         return redirect('/')
 
     def delete(self, request):
