@@ -31,6 +31,17 @@
   font-size: 3.8rem;
 }
 
+.home-icon {
+  height: 1.5rem;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+#add-link-btn {
+  border: none;
+  background: white;
+}
+
 #price-history-table {
   width: 70%;
   margin: 2rem auto;
