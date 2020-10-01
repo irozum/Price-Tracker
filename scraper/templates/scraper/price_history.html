@@ -1,0 +1,28 @@
+{% extends 'scraper/base.html' %}
+
+{% block title %}History{% endblock %}
+
+
+{% block main %}
+
+<div class="container">
+    <h2 class="text-center my-3">Product Price History</h1>
+
+    <table class="table table-striped" id="price-history-table">
+        <thead>
+            <tr>
+                <th scope="col">Date Generated</th>
+                <th scope="col" class="text-right">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for price in object_list %}
+            <tr>
+                <td>{{ price.date_generated }}</td>
+                <td class="text-right">${{ price.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -42,19 +42,20 @@ def check():
 
         newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
         i = [x.isdigit() for x in newPrice].index(True)
-        newPrice = int(round(float(newPrice[i:])))
+        newPrice = round(float(newPrice[i:]), 2)
 
-        prices = Price.objects.filter(link=link).order_by('-id')
-        if len(prices) == 0: break
-        yesterdayPrice = prices[0].price
-
-        if (newPrice != yesterdayPrice):
-            difference = 'increased' if newPrice > yesterdayPrice else 'decreased'
-            sendEmail(difference, link.product_name, link.url, yesterdayPrice, newPrice)
-
-        print(newPrice)
         newPrice = Price(link=link, price=newPrice)
         newPrice.save()
+
+        prices = Price.objects.filter(link=link).order_by('-id')
+        if len(prices) == 1: break
+        todayPrice = prices[0].price
+        yesterdayPrice = prices[1].price
+
+        if (todayPrice != yesterdayPrice):
+            difference = 'increased' if todayPrice > yesterdayPrice else 'decreased'
+            sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
+        
 
     driver.quit()
 
