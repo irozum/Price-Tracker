@@ -45,6 +45,8 @@ def check():
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
 
+        print(newPrice)
+
         newPrice = Price(link=link, price=newPrice)
         newPrice.save()
 
