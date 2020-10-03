@@ -38,9 +38,14 @@ def check():
     links = Link.objects.all()
     for link in links:
         driver.get(link.url)
+
+        print(f'link is {link}')
+
         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-        print(soup.find(id='priceblock_ourprice'))
+
+
+        print(f'soup is {soup}')
 
         newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
         i = [x.isdigit() for x in newPrice].index(True)
