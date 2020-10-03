@@ -41,6 +41,8 @@ def check():
         driver.get(link.url)
         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
+        print(soup)
+
         newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
