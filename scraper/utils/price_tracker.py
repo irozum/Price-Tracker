@@ -40,7 +40,7 @@ def check():
     chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', 'chromedriver')
     options = webdriver.ChromeOptions()
     options.binary_location = chrome_bin
-    options.add_argument(" — disable-gpuc)
+    options.add_argument(" — disable-gpuc")
     options.add_argument(" — no-sandbox")
     options.add_argument(' — headless')
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
