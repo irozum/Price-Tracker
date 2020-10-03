@@ -43,6 +43,8 @@ def check():
     options.add_argument(" — disable-gpuc")
     options.add_argument(" — no-sandbox")
     options.add_argument(' — headless')
+    options.add_argument(' - disable-dev-shm-usage')
+    
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
 
