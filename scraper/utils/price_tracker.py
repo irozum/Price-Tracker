@@ -75,7 +75,7 @@ def check():
 
 
         print(soup.find(id='priceblock_ourprice'))
-        # print(f'soup is {soup}')
+
 
         newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
         
