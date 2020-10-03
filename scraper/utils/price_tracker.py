@@ -7,8 +7,8 @@ from email.message import EmailMessage
 
 
 def sendEmail(difference, product, url, old_price, new_price):
-    EMAIL_ADDRESS = 'farkop69f@gmail.com'
-    EMAIL_PASSWORD = 'gazpachoRVD4112'
+    EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+    EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
     msg = EmailMessage()
     msg['Subject'] = f'Price has {difference} for {product}'
@@ -25,27 +25,14 @@ def sendEmail(difference, product, url, old_price, new_price):
 
 
 def check():
-    # driver_location = '/Users/irozum/Dev/Python/Scraper/scraper_project/scraper/utils/chromedriver'
-    # options = webdriver.ChromeOptions()
-    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    # options.add_argument("--headless")
-    # options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--disable-gpu")
-    # options.add_argument("--no-sandbox")
-    # options.add_argument("--disable-infobars")
-    # executable_path = os.environ.get("CHROMEDRIVER_PATH") if os.environ.get("CHROMEDRIVER_PATH") else driver_location
-    # driver = webdriver.Chrome(executable_path=executable_path, options=options)
-
-    CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', 'chromedriver')
     options = webdriver.ChromeOptions()
-    options.binary_location = chrome_bin
-    options.add_argument(" — disable-gpuc")
-    options.add_argument(" — no-sandbox")
-    options.add_argument(' — headless')
-    options.add_argument(' - disable-dev-shm-usage')
-    
-    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    options.add_argument("--headless")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    executable_path = os.environ.get("CHROMEDRIVER_PATH")
+    driver = webdriver.Chrome(executable_path=executable_path, options=options)
 
 
     links = Link.objects.all()
