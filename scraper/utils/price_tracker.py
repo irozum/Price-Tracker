@@ -4,6 +4,7 @@ from selenium import webdriver
 import os
 import smtplib
 from email.message import EmailMessage
+import requests
 
 
 def sendEmail(difference, product, url, old_price, new_price):
@@ -25,29 +26,59 @@ def sendEmail(difference, product, url, old_price, new_price):
 
 
 def check():
-    driver_location = '/Users/irozum/Dev/Python/Scraper/scraper_project/scraper/utils/chromedriver'
-    options = webdriver.ChromeOptions()
-    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    options.add_argument("--headless")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    executable_path = os.environ.get("CHROMEDRIVER_PATH") if os.environ.get("CHROMEDRIVER_PATH") else driver_location
-    driver = webdriver.Chrome(executable_path=executable_path, options=options)
+    # driver_location = '/Users/irozum/Dev/Python/Scraper/scraper_project/scraper/utils/chromedriver'
+    # options = webdriver.ChromeOptions()
+    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # options.add_argument("--headless")
+    # options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument("--disable-gpu")
+    # options.add_argument("--no-sandbox")
+    # executable_path = os.environ.get("CHROMEDRIVER_PATH") if os.environ.get("CHROMEDRIVER_PATH") else driver_location
+    # driver = webdriver.Chrome(executable_path=executable_path, options=options)
+
+
+    # headers = {
+    #     'Host': 'www.amazon.ca',
+    #     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+    #     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    #     'Accept-Language': 'en-US,en;q=0.5',
+    #     'Accept-Encoding': 'gzip, deflate, br',
+    #     'Connection': 'keep-alive',
+    #     'Upgrade-Insecure-Requests': '1',
+    #     'TE': 'Trailers'
+    # }
+
+    headers = {
+        'authority': 'www.amazon.com',
+        'pragma': 'no-cache',
+        'cache-control': 'no-cache',
+        'dnt': '1',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'sec-fetch-site': 'none',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-dest': 'document',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+    }
 
     links = Link.objects.all()
     for link in links:
-        driver.get(link.url)
+        # driver.get(link.url)
 
-        print(f'link is {link}')
+        # print(f'link is {link}')
 
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        r = requests.get(link.url, headers=headers)
+        soup = BeautifulSoup(r.text, 'html.parser')
 
 
-
-        print(f'soup is {soup}')
+        print(soup.find(id='priceblock_ourprice'))
+        # print(f'soup is {soup}')
 
         newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
+        
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
 
@@ -64,7 +95,7 @@ def check():
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
         
 
-    driver.quit()
+    # driver.quit()
 
 if '__name__' == '__main__':
     check()
