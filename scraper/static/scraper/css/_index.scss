@@ -1,7 +1,14 @@
+@import './variables';
+
+
 .container {
     > h1 {
         font-family: 'Airbnb Cereal App Bold';
         font-size: 3.8rem;
+    }
+
+    thead th {
+        border-top: none;
     }
 }
 
@@ -13,5 +20,14 @@
 
 #add-link-btn {
     border: none;
-    background: white;
+    background: $dark-color-1;
+    padding: 0;
+
+    &:focus {
+        outline:none;
+    }
+}
+
+#add-link-btn > img {
+    width: 1.7rem;
 }

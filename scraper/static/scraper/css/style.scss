@@ -1,10 +1,13 @@
 @import './fonts';
 @import './index';
 @import './history';
+@import './variables';
 
 
 body {
     font-family: 'Airbnb Cereal App Book';
+    background: $dark-color-1;
+    color: white;
 }
 
 .modal-content {
@@ -25,6 +28,42 @@ body {
     background: #D9ECDB;
 }
 
+table {
+    color: white !important;
+}
+
+.table td, .table th {
+    border-top: 1px solid $dark-color-3;
+}
+
+.table thead th {
+    border-bottom: 2px solid $dark-color-3;;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background: $dark-color-2;
+}
+
+.modal-content {
+    background: $dark-color-2;
+}
+
+.modal-header {
+    border-bottom: 1px solid $dark-color-3;
+}
+
+.modal-footer {
+    border-top: 1px solid $dark-color-3;
+}
+
+.modal .close {
+    color: white;
+}
+
+select, input {
+    background: $dark-color-1 !important;
+    border: 1px solid $dark-color-3 !important;
+}
 
 @media (min-width: 1200px) {
     .container {
