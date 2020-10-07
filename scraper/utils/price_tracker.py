@@ -1,15 +1,16 @@
 from scraper.models import Link, Price
 from bs4 import BeautifulSoup
-# from selenium import webdriver
 import os
 import smtplib
 from email.message import EmailMessage
 import requests
+import time
+import datetime
 
 
 HEADERS = ({'User-Agent':
-                'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
-                'Accept-Language': 'en-US, en;q=0.5'})
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+            'Accept-Language': 'en-US, en;q=0.5'})
 
 
 def sendEmail(difference, product, url, old_price, new_price):
@@ -31,39 +32,38 @@ def sendEmail(difference, product, url, old_price, new_price):
 
 
 def check():
-    # options = webdriver.ChromeOptions()
-    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    # options.add_argument("--headless")
-    # options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--disable-gpu")
-    # options.add_argument("--no-sandbox")
-    # executable_path = os.environ.get("CHROMEDRIVER_PATH")
-    # driver = webdriver.Chrome(executable_path=executable_path, options=options)
-
-
     links = Link.objects.all()
-    for link in links:
-        # driver.get(link.url)
-        # soup = BeautifulSoup(driver.page_source, 'html.parser')
+    list_length = len(links)
 
-        # newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
-        # i = [x.isdigit() for x in newPrice].index(True)
-        # newPrice = round(float(newPrice[i:]), 2)
+    for n, link in enumerate(links):
 
-        # print(newPrice)
+        # Skip if price was saved today already
+        last_price = Price.objects.filter(link=link).order_by('-id')[0]
+        if last_price is not None:
+            last_saved_day = last_price.date_generated.strftime('%d')
+            today_day = datetime.datetime.today().strftime('%d')
+            if today_day == last_saved_day:
+                break
 
-
+        # Get page content
         page = requests.get(link.url, headers=HEADERS)
         soup = BeautifulSoup(page.content, 'html.parser')
+        price_element = soup.find(id='priceblock_ourprice')
+        
+        # If no response from website, print it's content 
+        if price_element is None:
+            print(soup)
+            continue
+        
+        # Get and save new price
         newPrice = soup.find(id='priceblock_ourprice').get_text()
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
         print(newPrice)
-
-
         newPrice = Price(link=link, price=newPrice)
         newPrice.save()
 
+        # Compare last 2 prices
         prices = Price.objects.filter(link=link).order_by('-id')
         if len(prices) == 1: break
         todayPrice = prices[0].price
@@ -72,9 +72,12 @@ def check():
         if (todayPrice != yesterdayPrice):
             difference = 'increased' if todayPrice > yesterdayPrice else 'decreased'
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
-
-
-    # driver.quit()
+        
+        # Wait for 1 minute
+        if n+1 != list_length:
+            for x in range(60):
+                print('.', end='', flush=True)
+                time.sleep(1)
 
 
 if '__name__' == '__main__':
