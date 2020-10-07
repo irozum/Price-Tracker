@@ -1,5 +1,6 @@
 from scraper.models import Link, Price
 from bs4 import BeautifulSoup
+# from selenium import webdriver
 import os
 import smtplib
 from email.message import EmailMessage
@@ -30,14 +31,35 @@ def sendEmail(difference, product, url, old_price, new_price):
 
 
 def check():
+    # options = webdriver.ChromeOptions()
+    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # options.add_argument("--headless")
+    # options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument("--disable-gpu")
+    # options.add_argument("--no-sandbox")
+    # executable_path = os.environ.get("CHROMEDRIVER_PATH")
+    # driver = webdriver.Chrome(executable_path=executable_path, options=options)
+
+
     links = Link.objects.all()
     for link in links:
+        # driver.get(link.url)
+        # soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        # newPrice = soup.find(id='priceblock_ourprice').get_text().strip()
+        # i = [x.isdigit() for x in newPrice].index(True)
+        # newPrice = round(float(newPrice[i:]), 2)
+
+        # print(newPrice)
+
+
         page = requests.get(link.url, headers=HEADERS)
         soup = BeautifulSoup(page.content, 'html.parser')
         newPrice = soup.find(id='priceblock_ourprice').get_text()
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
         print(newPrice)
+
 
         newPrice = Price(link=link, price=newPrice)
         newPrice.save()
@@ -50,6 +72,9 @@ def check():
         if (todayPrice != yesterdayPrice):
             difference = 'increased' if todayPrice > yesterdayPrice else 'decreased'
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
+
+
+    # driver.quit()
 
 
 if '__name__' == '__main__':
