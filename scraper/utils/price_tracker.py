@@ -68,7 +68,6 @@ def check():
         if len(prices) == 1: break
         todayPrice = prices[0].price
         yesterdayPrice = prices[1].price
-
         if (todayPrice != yesterdayPrice):
             difference = 'increased' if todayPrice > yesterdayPrice else 'decreased'
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
