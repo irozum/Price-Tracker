@@ -1,6 +1,6 @@
 from scraper.models import Link, Price
 from bs4 import BeautifulSoup
-from selenium import webdriver
+# from selenium import webdriver
 import os
 import smtplib
 from email.message import EmailMessage
@@ -28,12 +28,6 @@ def sendEmail(difference, product, url, old_price, new_price):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         smtp.send_message(msg)
-
-
-# def check():
-    
-
-    
 
 
 def check():
@@ -79,8 +73,6 @@ def check():
             difference = 'increased' if todayPrice > yesterdayPrice else 'decreased'
             sendEmail(difference, link.product_name, link.url, yesterdayPrice, todayPrice)
 
-
-        break
 
     # driver.quit()
 
