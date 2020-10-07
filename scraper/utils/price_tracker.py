@@ -52,7 +52,7 @@ def check():
         
         # If no response from website, print it's content 
         if price_element is None:
-            print(soup)
+            print(f'{link.product_name} price could not be fetched')
             continue
         
         # Get and save new price

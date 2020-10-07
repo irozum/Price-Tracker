@@ -74,6 +74,7 @@ body {
   margin: 1rem;
   padding: 1rem 1rem;
   border-radius: 5px;
+  color: black;
 }
 
 .message.error {
@@ -119,6 +120,7 @@ table {
 select, input {
   background: #181818 !important;
   border: 1px solid #464545 !important;
+  color: white !important;
 }
 
 @media (min-width: 1200px) {

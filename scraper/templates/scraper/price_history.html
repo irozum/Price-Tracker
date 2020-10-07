@@ -6,7 +6,7 @@
 {% block main %}
 
 <div class="container">
-    <h2 class="text-center my-3">Product Price History</h1>
+    <h2 class="text-center my-3">{{ product_name }} Price History</h1>
 
     <table class="table table-striped" id="price-history-table">
         <thead>
@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for price in object_list %}
+            {% for price in prices %}
             <tr>
                 <td>{{ price.date_generated }}</td>
                 <td class="text-right">${{ price.price }}</td>
