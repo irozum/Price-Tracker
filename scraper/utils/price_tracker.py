@@ -1,12 +1,9 @@
 from scraper.models import Link, Price
 from bs4 import BeautifulSoup
 import os
-# import smtplib
-# from email.message import EmailMessage
 import requests
 import time
 import datetime
-
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -17,14 +14,15 @@ HEADERS = ({'User-Agent':
 
 
 def sendEmail(difference, product, url, old_price, new_price):
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['farkop69f@gmail.com']
+    subject = f'Price has {difference} for {product}'
+    message = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
+                
+    Link: {url}'''
+
     try:
-        subject = f'Price has {difference} for {product}'
-        message = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
-                    
-        Link: {url}'''
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['farkop69f@gmail.com']
-        send_mail( subject, message, email_from, recipient_list )
+        send_mail(subject, message, email_from, recipient_list)
     except Exception as e:
         print(f'Email sending failed: {e}')
     
@@ -44,15 +42,6 @@ def check():
     list_length = len(links)
 
     for n, link in enumerate(links):
-
-        # Skip if price was saved today already
-        last_price = Price.objects.filter(link=link).order_by('-id')[0]
-        if last_price is not None:
-            last_saved_day = last_price.date_generated.strftime('%d')
-            today_day = datetime.datetime.today().strftime('%d')
-            if today_day == last_saved_day:
-                continue
-
         # Get page content
         counter = 0
         while True:
