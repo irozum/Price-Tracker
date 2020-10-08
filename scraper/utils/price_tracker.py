@@ -82,7 +82,8 @@ def check():
             for x in range(60):
                 print('.', end='', flush=True)
                 time.sleep(1)
+            print()
 
 
-if '__name__' == '__main__':
+if __name__ == '__main__':
     check()
