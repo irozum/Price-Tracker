@@ -16,29 +16,6 @@ HEADERS = ({'User-Agent':
             'Accept-Language': 'en-US, en;q=0.5'})
 
 
-# def sendEmail(difference, product, url, old_price, new_price):
-#     EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
-#     EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-#     receiver = 'farkop69@gmail.com'
-
-#     msg = EmailMessage()
-#     msg['Subject'] = f'Price has {difference} for {product}'
-#     msg['From'] = EMAIL_ADDRESS
-#     msg['To'] = receiver
-#     content = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
-                   
-#     Link: {url}'''
-#     msg.set_content(content)
-
-#     try:
-#         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-#             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-#             smtp.sendmail(EMAIL_ADDRESS, receiver, msg.as_string())
-#     except Exception as e:
-#         print(f'Email sending failed: {e}')
-
-
-
 def sendEmail(difference, product, url, old_price, new_price):
     try:
         subject = f'Price has {difference} for {product}'
@@ -77,15 +54,23 @@ def check():
                 continue
 
         # Get page content
-        page = requests.get(link.url, headers=HEADERS)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        price = get_price(soup, link.website.price_getter_type, link.website.price_getter)
-        
-        # If no response from website, print it's content 
+        counter = 0
+        while True:
+            page = requests.get(link.url, headers=HEADERS)
+            soup = BeautifulSoup(page.content, 'html.parser')
+            price = get_price(soup, link.website.price_getter_type, link.website.price_getter)
+
+            if price or counter > 10:
+                break
+            else:
+                counter += 1
+
+        # If no response from website, print it's content
         if price is None:
             print(f'{link.product_name} price could not be fetched')
             continue
-        
+
+
         # Get and save new price
         newPrice = price.get_text()
         i = [x.isdigit() for x in newPrice].index(True)
