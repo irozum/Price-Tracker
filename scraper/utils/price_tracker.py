@@ -46,7 +46,7 @@ def sendEmail(difference, product, url, old_price, new_price):
                     
         Link: {url}'''
         email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['farkop69@gmail.com']
+        recipient_list = ['farkop69f@gmail.com']
         send_mail( subject, message, email_from, recipient_list )
     except Exception as e:
         print(f'Email sending failed: {e}')
