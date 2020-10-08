@@ -16,19 +16,23 @@ HEADERS = ({'User-Agent':
 def sendEmail(difference, product, url, old_price, new_price):
     EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
     EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+    receiver = 'farkop69@gmail.com'
 
     msg = EmailMessage()
     msg['Subject'] = f'Price has {difference} for {product}'
     msg['From'] = EMAIL_ADDRESS
-    msg['To'] = 'farkop69@gmail.com'
+    msg['To'] = receiver
     content = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
                    
     Link: {url}'''
     msg.set_content(content)
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        smtp.send_message(msg)
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            smtp.sendmail(EMAIL_ADDRESS, receiver, msg.as_string())
+    except:
+        print('Email sending failed')
 
 
 def get_price(soup, getter_type, getter):
