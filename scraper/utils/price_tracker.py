@@ -31,8 +31,8 @@ def sendEmail(difference, product, url, old_price, new_price):
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             smtp.sendmail(EMAIL_ADDRESS, receiver, msg.as_string())
-    except:
-        print('Email sending failed')
+    except Exception as e:
+        print(f'Email sending failed: {e}')
 
 
 def get_price(soup, getter_type, getter):
