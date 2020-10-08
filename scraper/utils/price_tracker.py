@@ -31,6 +31,15 @@ def sendEmail(difference, product, url, old_price, new_price):
         smtp.send_message(msg)
 
 
+def get_price(soup, getter_type, getter):
+    if getter_type == 'id':
+        return soup.find(id=getter)
+    elif getter_type == 'class':
+        return soup.find_all(class_=getter)[0]
+    else:
+        return None
+
+
 def check():
     links = Link.objects.all()
     list_length = len(links)
@@ -48,15 +57,15 @@ def check():
         # Get page content
         page = requests.get(link.url, headers=HEADERS)
         soup = BeautifulSoup(page.content, 'html.parser')
-        price_element = soup.find(id='priceblock_ourprice')
+        price = get_price(soup, link.website.price_getter_type, link.website.price_getter)
         
         # If no response from website, print it's content 
-        if price_element is None:
+        if price is None:
             print(f'{link.product_name} price could not be fetched')
             continue
         
         # Get and save new price
-        newPrice = soup.find(id='priceblock_ourprice').get_text()
+        newPrice = price.get_text()
         i = [x.isdigit() for x in newPrice].index(True)
         newPrice = round(float(newPrice[i:]), 2)
         print(newPrice)

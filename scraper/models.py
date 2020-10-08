@@ -4,6 +4,8 @@ from django.db import models
 class Website(models.Model):
     name = models.CharField(max_length=40)
     domain = models.CharField(max_length=60)
+    price_getter_type = models.CharField(max_length=50)
+    price_getter = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
