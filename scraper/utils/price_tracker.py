@@ -52,7 +52,7 @@ def check():
             last_saved_day = last_price.date_generated.strftime('%d')
             today_day = datetime.datetime.today().strftime('%d')
             if today_day == last_saved_day:
-                break
+                continue
 
         # Get page content
         page = requests.get(link.url, headers=HEADERS)

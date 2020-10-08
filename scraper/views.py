@@ -39,7 +39,7 @@ class History(View):
     def get(self, request, *args, **kwargs):
         link = Link.objects.get(pk=self.kwargs['pk'])
         context = {
-            'prices': Price.objects.filter(link=self.kwargs['pk']),
+            'prices': Price.objects.filter(link=self.kwargs['pk']).order_by('-pk'),
             'product_name': link.product_name
         }
         return render(request, 'scraper/price_history.html', context)
