@@ -1,11 +1,14 @@
 from scraper.models import Link, Price
 from bs4 import BeautifulSoup
 import os
-import smtplib
-from email.message import EmailMessage
+# import smtplib
+# from email.message import EmailMessage
 import requests
 import time
 import datetime
+
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 HEADERS = ({'User-Agent':
@@ -13,26 +16,41 @@ HEADERS = ({'User-Agent':
             'Accept-Language': 'en-US, en;q=0.5'})
 
 
-def sendEmail(difference, product, url, old_price, new_price):
-    EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
-    EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-    receiver = 'farkop69@gmail.com'
+# def sendEmail(difference, product, url, old_price, new_price):
+#     EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+#     EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+#     receiver = 'farkop69@gmail.com'
 
-    msg = EmailMessage()
-    msg['Subject'] = f'Price has {difference} for {product}'
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = receiver
-    content = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
+#     msg = EmailMessage()
+#     msg['Subject'] = f'Price has {difference} for {product}'
+#     msg['From'] = EMAIL_ADDRESS
+#     msg['To'] = receiver
+#     content = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
                    
-    Link: {url}'''
-    msg.set_content(content)
+#     Link: {url}'''
+#     msg.set_content(content)
 
+#     try:
+#         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+#             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+#             smtp.sendmail(EMAIL_ADDRESS, receiver, msg.as_string())
+#     except Exception as e:
+#         print(f'Email sending failed: {e}')
+
+
+
+def sendEmail(difference, product, url, old_price, new_price):
     try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            smtp.sendmail(EMAIL_ADDRESS, receiver, msg.as_string())
+        subject = f'Price has {difference} for {product}'
+        message = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
+                    
+        Link: {url}'''
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ['farkop69@gmail.com']
+        send_mail( subject, message, email_from, recipient_list )
     except Exception as e:
         print(f'Email sending failed: {e}')
+    
 
 
 def get_price(soup, getter_type, getter):
