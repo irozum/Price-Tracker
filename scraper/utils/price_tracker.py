@@ -57,6 +57,7 @@ def check():
         # If no response from website, print it's content
         if price is None:
             print(f'{link.product_name} price could not be fetched')
+            print(soup)
             continue
 
 
