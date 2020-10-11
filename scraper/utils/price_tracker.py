@@ -15,7 +15,7 @@ HEADERS = ({'User-Agent':
 
 def sendEmail(difference, product, url, old_price, new_price):
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['farkop69f@gmail.com']
+    recipient_list = ['rozumiq@gmail.com']
     subject = f'Price has {difference} for {product}'
     message = f'''Price has {difference} for {product}: {old_price} -> {new_price}.
                 
