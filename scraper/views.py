@@ -23,7 +23,7 @@ class Index(View):
         website = Website.objects.get(pk=website_id)
 
         if website.domain not in link:
-            messages.error(request, "Website and link don't match")
+            messages.error(request, "Selected website and provided url don't match")
             return redirect('/')
 
         Link(website=website, product_name=product, url=link).save()
