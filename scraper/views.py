@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from urllib.parse import urlparse
 from .forms import LinkForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 class Index(View):
@@ -38,8 +39,21 @@ class LinkDelete(generic.DeleteView):
 class History(View):
     def get(self, request, *args, **kwargs):
         link = Link.objects.get(pk=self.kwargs['pk'])
+
+        prices = Price.objects.filter(link=self.kwargs['pk']).order_by('-pk')
+        paginator = Paginator(prices, 25)
+
+        page_number = request.GET.get('page', 1)
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.get_page(1)
+        except EmptyPage:
+            page_obj = paginator.get_page(paginator.num_pages)
+
         context = {
-            'prices': Price.objects.filter(link=self.kwargs['pk']).order_by('-pk'),
+            'prices': page_obj,
             'product_name': link.product_name
         }
         return render(request, 'scraper/price_history.html', context)

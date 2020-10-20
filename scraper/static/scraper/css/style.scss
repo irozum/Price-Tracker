@@ -67,6 +67,27 @@ select, input {
     color: white !important;
 }
 
+.pagination-block {
+    display: flex;
+    justify-content: center;
+}
+
+.page-link {
+    background-color: $dark-color-3;
+    border: none;
+    color: white;
+
+    &:hover {
+        background-color: $dark-color-2;
+        color: white;
+    }
+}
+
+.page-item.disabled .page-link {
+    background-color: $dark-color-3;
+    color: lightgray;
+}
+
 @media (min-width: 1200px) {
     .container {
         max-width: 900px;

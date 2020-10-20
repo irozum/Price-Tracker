@@ -8,21 +8,45 @@
 <div class="container">
     <h2 class="text-center my-3">{{ product_name }} Price History</h1>
 
-    <table class="table table-striped" id="price-history-table">
-        <thead>
-            <tr>
-                <th scope="col">Date Generated</th>
-                <th scope="col" class="text-right">Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for price in prices %}
-            <tr>
-                <td>{{ price.date_generated }}</td>
-                <td class="text-right">${{ price.price }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-striped" id="price-history-table">
+            <thead>
+                <tr>
+                    <th scope="col">Date Generated</th>
+                    <th scope="col" class="text-right">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for price in prices %}
+                <tr>
+                    <td>{{ price.date_generated }}</td>
+                    <td class="text-right">${{ price.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if prices.has_other_pages %}
+            <div class="pagination-block">
+                <ul class="pagination">
+                    {% if prices.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ prices.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" disabled><span>&laquo;</span></a></li>
+                    {% endif %}
+                    {% for i in prices.paginator.page_range %}
+                        {% if prices.number == i %}
+                            <li class="page-item active"><a class="page-link" disabled><span>{{ i }} <span class="sr-only">(current)</span></span></a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if prices.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ prices.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" disabled><span>&raquo;</span></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
 </div>
 {% endblock %}
