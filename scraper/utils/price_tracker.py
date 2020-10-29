@@ -44,12 +44,14 @@ def check():
     for n, link in enumerate(links):
 
         # Skip if price was saved today already
-        last_price = Price.objects.filter(link=link).order_by('-id')[0]
-        if last_price is not None:
-            last_saved_day = last_price.date_generated.strftime('%d')
-            today_day = datetime.datetime.today().strftime('%d')
-            if today_day == last_saved_day:
-                continue
+        prices = Price.objects.filter(link=link).order_by('-id')
+        if len(prices) > 0:
+            last_price = prices[0]
+            if last_price is not None:
+                last_saved_day = last_price.date_generated.strftime('%d')
+                today_day = datetime.datetime.today().strftime('%d')
+                if today_day == last_saved_day:
+                    continue
 
         # Get page content
         counter = 0
