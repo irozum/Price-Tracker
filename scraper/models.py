@@ -14,7 +14,7 @@ class Website(models.Model):
 class Link(models.Model):
     website = models.ForeignKey(Website, on_delete=models.CASCADE, default='')
     product_name = models.CharField(max_length=40)
-    url = models.URLField()
+    url = models.URLField(max_length=2000)
 
     def __str__(self):
         return f'{self.product_name} on {self.website.name}'
